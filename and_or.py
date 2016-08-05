@@ -1,4 +1,3 @@
-#Adding an additional comment to see if it gets updated on github.com. Will delete later.
 #This code plots a sufficient-necessary representation of a network from an input file listing the update rules
 #Fixes needed - get more sensible arrows; reads extra space as a node
 #Major bug fixes needed - cannot cancel consecutive NOTs; doesn't eliminate unnecessary brackets; fails on nested brackets; check the entire graph for homogeneity rule once it is constructed - assign node colors; produce reduced network if initial values of some variables is given
