@@ -1,9 +1,11 @@
 #This code plots a sufficient-necessary representation of a network from an input file listing the update rules
-#Fixes needed - get more sensible arrows; reads extra space as a node
+#Fixes needed; reads extra space as a node
 #Major bug fixes needed - cannot cancel consecutive NOTs; doesn't eliminate unnecessary brackets; fails on nested brackets; check the entire graph for homogeneity rule once it is constructed - assign node colors; produce reduced network if initial values of some variables is given
 
 import networkx as nx
 import matplotlib.pyplot as plt
+import graphviz
+import pydot
 
 G = nx.DiGraph()
 
@@ -17,7 +19,7 @@ def create_node(node,node_list):
 
 keywds = ['NOT','not','AND','and','OR','or']
 
-f = open('test/rules_6.txt','r+')
+f = open('test/rules_7.txt','r+')
 
 #f.seek(0)
 lines = f.readlines()
@@ -80,18 +82,22 @@ for i in range(l):
           relation = words[j-1]
         if relation=='AND' or relation=='and':
           if is_inh==0:
-            col = 'b'
+            col = 'blue'
           else:
-            col = 'r'
+            col = 'red'
         elif relation=='OR' or relation=='or':
           if is_inh==0:
-            col = 'r'
+            col = 'red'
           else:
-            col = 'b'
+            col = 'blue'
         else:
-          col = 'k'
+          col = 'black'
         #add inhibitory edge from next_node to node of color color
-        G.add_edge(next_node,tnode, color = col, attr = is_inh)
+        if is_inh==0:
+            etype = 'normal'
+        elif is_inh==1:
+            etype = 'tee'
+        G.add_edge(next_node,tnode, color = col, arrowhead = etype)
       if atbeginning and not end_found:
         if words[j-1]=='NOT' or words[j-1]=='not':
           cis_inh = 1
@@ -104,17 +110,21 @@ for i in range(l):
       if crelation:
         if crelation=='AND' or crelation=='and':
           if cis_inh==0:
-            ccol = 'b'
+            ccol = 'blue'
           else:
-            ccol = 'r'
+            ccol = 'red'
         elif crelation=='OR' or crelation=='or':
           if cis_inh==0:
-            ccol = 'r'
+            ccol = 'red'
           else:
-            ccol = 'b'
+            ccol = 'blue'
         else:
-          ccol = 'k'
-        G.add_edge(cnode,node,color = ccol, attr = cis_inh)
+          ccol = 'black'
+        if cis_inh==0:
+            cetype = 'normal'
+        elif cis_inh==1:
+            cetype = 'tee'
+        G.add_edge(cnode,node,color = ccol, arrowhead = cetype)
         connected=True
             
       
@@ -129,4 +139,7 @@ for i in range(l):
 #nx.draw(G, with_labels = True, arrows = True, edge_color=colors)
 #plt.show()
 
-nx.write_graphml(G,"test/six3.graphml")
+#nx.write_graphml(G,"test/six4.graphml")
+nx.drawing.nx_agraph.write_dot(G,"test/seven_dot.dot")
+graph = nx.drawing.nx_pydot.to_pydot(G)
+graph.write_png('test/seven_img.png')
