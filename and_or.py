@@ -6,6 +6,9 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import graphviz
 import pydot
+import sys
+
+rulefile = sys.argv[1]
 
 G = nx.DiGraph()
 
@@ -19,7 +22,8 @@ def create_node(node,node_list):
 
 keywds = ['NOT','not','AND','and','OR','or']
 
-f = open('test/rules_7.txt','r+')
+infile = rulefile + '.txt'
+f = open(infile,'r+')
 
 #f.seek(0)
 lines = f.readlines()
@@ -140,6 +144,8 @@ for i in range(l):
 #plt.show()
 
 #nx.write_graphml(G,"test/six4.graphml")
-nx.drawing.nx_agraph.write_dot(G,"test/seven_dot.dot")
+outdot = rulefile + '.dot'
+outpng = rulefile + '.png'
+nx.drawing.nx_agraph.write_dot(G,outdot)
 graph = nx.drawing.nx_pydot.to_pydot(G)
-graph.write_png('test/seven_img.png')
+graph.write_png(outpng)
