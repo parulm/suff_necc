@@ -143,7 +143,8 @@ for i in range(l):
 #nx.draw(G, with_labels = True, arrows = True, edge_color=colors)
 #plt.show()
 
-#nx.write_graphml(G,"test/six4.graphml")
+outgraphml = rulefile + '.graphml'
+nx.write_graphml(G,outgraphml)
 outdot = rulefile + '.dot'
 outpng = rulefile + '.png'
 nx.drawing.nx_agraph.write_dot(G,outdot)
