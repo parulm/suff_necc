@@ -2,13 +2,15 @@
 
 import networkx as nx
 import pydot
-import sys
+#import sys
 
-gmlfile = sys.argv[1]
+#gmlfile = sys.argv[1]
 
-def gml2dot(gmlfile):
+#gmlfile = 'test.gml'
+
+def gml2dot(fname):
     
-    fname = gmlfile + '.gml'
+    #fname = gmlfile + '.gml'
     
     G = nx.DiGraph()
     G = nx.read_gml(fname)
@@ -51,14 +53,14 @@ def gml2dot(gmlfile):
         etype = edge_list[2][i]
         H.add_edge(*e, color = col, arrowhead = etype)
            
-    
+    '''
     dotfname = gmlfile + '.dot'
     nx.drawing.nx_agraph.write_dot(H,dotfname)
     
     graphmlfname = gmlfile + '.graphml'
     nx.write_graphml(H,graphmlfname)
-    
-    return None
+    '''
+    return H
 
 
-gml2dot(gmlfile)
+#gml2dot(gmlfile)
