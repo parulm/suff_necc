@@ -11,6 +11,7 @@ import pydot
 def gml2dot(fname):
     
     #fname = gmlfile + '.gml'
+    print 'Importing graph from', fname,'...'
     
     G = nx.DiGraph()
     G = nx.read_gml(fname)
@@ -60,6 +61,7 @@ def gml2dot(fname):
     graphmlfname = gmlfile + '.graphml'
     nx.write_graphml(H,graphmlfname)
     '''
+    print 'Done.'
     return H
 
 

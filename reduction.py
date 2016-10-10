@@ -9,6 +9,7 @@ import path
 import gprops
 
 def edge_red(G):
+    print 'Running logical transitive reduction ...'
     for edge in G.edges():
         u = edge[0]
         v = edge[1]
@@ -23,11 +24,12 @@ def edge_red(G):
                 break
             else:
                 continue
-    
+    print 'Done.'
     return None
 
 
 def node_red(G):
+    print 'Collapsing nodes with one incoming and one outgoing edge ...'
     for node in G.nodes():
         s_list = G.successors(node)
         p_list = G.predecessors(node)
@@ -44,11 +46,12 @@ def node_red(G):
                     G.add_edge(parent,child,edge_attr=parent_relationship)
                     print 'Removing node',node
                     G.remove_node(node)
-        
+    print 'Done.'    
     return G
 
 #add test for feedforward loop in the following function?
 def pnode_collapse(G):
+    print 'Collapsing pseudo nodes with suff/necc edges ...'
     for node in G.nodes():
         nodename = G.node[node]['label']
         if not re.search('[a-zA-Z]+',nodename):
@@ -72,11 +75,12 @@ def pnode_collapse(G):
                         G.add_edge(parent,successor,edge_attr=successor_type)
                     print 'Removing node',node
                     G.remove_node(node)
-    
+    print 'Done'
     return G
 
 
 def homog_pnode(G):
+    print 'Collapsing homogenous pseudo nodes with only one outgoing edge and the type of incoming edges is the same as the outgoing one ...'
     for node in G.nodes():
         nodename = G.node[node]['label']
         if not re.search('[a-zA-Z]+',nodename) and gprops.node_homog(G,node):
@@ -108,5 +112,5 @@ def homog_pnode(G):
                             print 'Critical error in trying to collapse',node
                     print 'Removing node',node
                     G.remove_node(node)
-                    
+    print 'Done'                
     return None

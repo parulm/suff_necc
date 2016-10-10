@@ -46,7 +46,8 @@ reduction.homog_pnode(G)
 
 gprops.set_edge_props(G)
 
-
+'''
 #outfname = '/home/parul/python/graphs_try/trialf_out.graphml'
 outfname = '/home/parul/codes/ABA/ABA_11.graphml'
 nx.write_graphml(G,outfname)
+'''

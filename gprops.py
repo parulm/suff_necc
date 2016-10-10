@@ -14,6 +14,7 @@ def importgraph(file_name):
 
 
 def set_edge_type(G):
+    print 'Setting edge attribute from color and arrow types ...'
     for edge in G.edges():
         arr = G.get_edge_data(*edge)
         u = edge[0]
@@ -35,7 +36,7 @@ def set_edge_type(G):
                 G[u][v]['edge_attr']='s/n'
             elif etype=='tee':
                 G[u][v]['edge_attr']='s/ni'
-                
+    print 'Done.'            
     return G
 
 
@@ -82,6 +83,7 @@ def node_homog(G,node):
 
 
 def set_edge_props(G):
+    print 'Setting graphic properties of edges ...'
     for node in G.nodes():
         regulators = G.predecessors(node)
         for r in regulators:
@@ -104,11 +106,12 @@ def set_edge_props(G):
             elif etype=='s/ni':
                 G[r][node]['color']='black'
                 G[r][node]['arrowhead']='tee'
-    
+    print 'Done.'
     return None
 
 
 def set_node_type(G):
+    print 'Setting node types for all nodes'
     print 'This function must be run after testing for Homogeneity!'
     for node in G.nodes():
         regulator = G.predecessors(node)[0]
@@ -121,7 +124,7 @@ def set_node_type(G):
             node_color = 'black'
         
         G.node[node]['ncolor']=node_color
-    
+    print 'Done.'
     return None
 
 
@@ -138,6 +141,7 @@ def node_type(G,node):
 
 
 def lone_reg(G):
+    print 'Setting all single regulator nodes as suff/necc or inhibitory suff/necc ...'
     for node in G.nodes():
         regs = G.predecessors(node)
         if len(regs)==1:
@@ -151,5 +155,6 @@ def lone_reg(G):
             print 'Setting edge',parent,'->',node, 'as',newt
             G[parent][node]['edge_attr']=newt
             
+    print 'Done'
     return G
 
