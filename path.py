@@ -2,8 +2,8 @@
 
 import networkx as nx
 
+#Adds two types of relationships. The order is important here, preceding type is relationship while the succeeding one is edge_type. All not-addable pairs return null which can be used to check for subgraphs.
 def add(relationship,edge_type):
-    
     if relationship=='s/n':
         return edge_type
     
@@ -63,7 +63,9 @@ def add(relationship,edge_type):
             return 's/n'
         else:
             return 'null'
-        
+
+#Takes a graph and a list of nodes, path, which form a path in the graph. The function does not check if the given list is actually a path, if not it might throw in an ugly error. This function sequentially adds all the edges in the path and returns the total effect of the entire path and hence reflects the relationship between the first and last nodes of the list passed.
+#Possible fix: Can add a has_edge function at every iteration.
 def path_type(G, path):
     l = len(path)
     relationship = 's/n'

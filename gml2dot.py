@@ -10,13 +10,15 @@ import pydot
 
 def gml2dot(fname):
     
-    #fname = gmlfile + '.gml'
     print 'Importing graph from', fname,'...'
     
+    #Import graph from gml file
     G = nx.DiGraph()
     G = nx.read_gml(fname)
     
     edge_list = [[],[],[]]
+    
+    #Assign node color as readable by dot files and property mapper in yEd.
     l = G.edges()
     for i in l:
         m = G.get_edge_data(*i)
@@ -36,17 +38,22 @@ def gml2dot(fname):
         edge_list[1].append(edge_color)
         edge_list[2].append(edge_arrow)
             
+    
+    #Obtain a list of nodes
     n = G.nodes(data=True)        
     node_list = []    
     for j in n:
         node_list.append(j[0])
     
+    #Create a new graph to save only the required properties (yEd saves a lot of other details we do not want like orientation, position, etc.)
     H = nx.DiGraph()
     
+    #Add all nodes with the labels in the new graph
     for k in node_list:
         H.add_node(k)
         H.node[k]['label'] = k
-        
+    
+    #Add all the edges with color and arrow type in the new graph
     noe = G.number_of_edges()
     for i in range(noe):
         e = edge_list[0][i]

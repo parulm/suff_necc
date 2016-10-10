@@ -8,6 +8,7 @@ import re
 import path
 import gprops
 
+#Takes a graph and deletes every edge for which a path exists that causes the same effect as the edge i.e. the edge is same type as of the path. This is binary transitive reduction which conforms the logical correctness of reduction. Termed logical transitive reduction. Functions returns None.
 def edge_red(G):
     print 'Running logical transitive reduction ...'
     for edge in G.edges():
@@ -27,7 +28,8 @@ def edge_red(G):
     print 'Done.'
     return None
 
-
+#Takes a graph and for every pseudo node that has only one incoming and one outgoing, both of the same type, the node is collapsed i.e. an edge of same type is added between the predecessor and successor and the node itself is deleted. Returns the modified version of the graph.
+#Note: I think whatever this function can do is inclusive in functions pnode_collapse and homog_pnode. This depends on the version of graph you're dealing with and should be tested though.
 def node_red(G):
     print 'Collapsing nodes with one incoming and one outgoing edge ...'
     for node in G.nodes():
@@ -49,7 +51,8 @@ def node_red(G):
     print 'Done.'    
     return G
 
-#add test for feedforward loop in the following function?
+#Takes a graph and collapses pseudo nodes where either the incoming or outgoing edge is singular and s/n (edge can be singular and s/ni, this function does not collapse those cases while that would also be a valid reduction). In the collapsing process, the node is deleted and edges are added between the parent (child) and children (predecessors). I think what this function does is inclusive in the homog_pnode function but it depends on the state of the graph and should be tested. The function returns the modified graph.
+#Possible fixes: add test for feedforward loop
 def pnode_collapse(G):
     print 'Collapsing pseudo nodes with suff/necc edges ...'
     for node in G.nodes():
@@ -78,7 +81,8 @@ def pnode_collapse(G):
     print 'Done'
     return G
 
-
+#Takes a graph and for every pseudo node with only one outgoing edge which is of the same type as the incoming ones, the node is collapsed. While the node is removed, edges are added between the regulators and the child. The edge type is determined by adding regulator-node edge type with node-child edge type. The function returns None. 
+#Note: A similar function can be constructed on the lines of this function which deals with the case of only one incoming edge add-able to all outgoing edges.
 def homog_pnode(G):
     print 'Collapsing homogenous pseudo nodes with only one outgoing edge and the type of incoming edges is the same as the outgoing one ...'
     for node in G.nodes():
