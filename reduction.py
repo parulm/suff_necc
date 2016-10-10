@@ -51,7 +51,8 @@ def node_red(G):
     print 'Done.'    
     return G
 
-#Takes a graph and collapses pseudo nodes where either the incoming or outgoing edge is singular and s/n (edge can be singular and s/ni, this function does not collapse those cases while that would also be a valid reduction). In the collapsing process, the node is deleted and edges are added between the parent (child) and children (predecessors). I think what this function does is inclusive in the homog_pnode function but it depends on the state of the graph and should be tested. The function returns the modified graph.
+#Takes a graph and collapses pseudo nodes where either the incoming or outgoing edge is singular and s/n (edge can be singular and s/ni, this function does not collapse those cases while that would also be a valid reduction). In the collapsing process, the node is deleted and edges are added between the parent (child) and children (predecessors). 
+#Note: I think what this function does is inclusive in the homog_pnode function but it depends on the state of the graph and the version of homog_pnode function and should be tested. The function returns the modified graph.
 #Possible fixes: add test for feedforward loop
 def pnode_collapse(G):
     print 'Collapsing pseudo nodes with suff/necc edges ...'
