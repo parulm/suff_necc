@@ -2,7 +2,7 @@
 import networkx as nx
 import pygraphviz
 
-import gml2dot
+import importlib
 import gprops
 import path
 import reduction

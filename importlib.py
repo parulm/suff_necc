@@ -2,11 +2,7 @@
 
 import networkx as nx
 import pydot
-#import sys
 
-#gmlfile = sys.argv[1]
-
-#gmlfile = 'test.gml'
 
 def gml2dot(fname):
     
@@ -70,6 +66,3 @@ def gml2dot(fname):
     '''
     print 'Done.'
     return H
-
-
-#gml2dot(gmlfile)
