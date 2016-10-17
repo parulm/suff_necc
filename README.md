@@ -1,4 +1,4 @@
-##Library to handle graphs in sufficient-necessary framework.
+##Library to handle boolean networks in sufficient-necessary framework.
 ###Details of all the functions
 ####gml2dot:
 Takes a gml file in updated format and returns a networkx graph with only the needed edge and node properties.

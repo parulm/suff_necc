@@ -138,11 +138,14 @@ for i in range(l):
 		print ('Please enter a file with the correct syntax.')
 	#print (words)
 
+print G.node
+print G.edge
+
 #Uncomment the following code to see the network drawn by matplotlib - cannot differentiate between negative and positive edges
 #colors = [G[u][v]['color'] for u,v in G.edges()]
 #nx.draw(G, with_labels = True, arrows = True, edge_color=colors)
 #plt.show()
-
+'''
 outgraphml = rulefile + '.graphml'
 nx.write_graphml(G,outgraphml)
 outdot = rulefile + '.dot'
@@ -150,3 +153,4 @@ outpng = rulefile + '.png'
 nx.drawing.nx_agraph.write_dot(G,outdot)
 graph = nx.drawing.nx_pydot.to_pydot(G)
 graph.write_png(outpng)
+'''
