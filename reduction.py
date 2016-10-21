@@ -110,7 +110,7 @@ def homog_pnode(G):
                     for r in regulators:
                         rtype = G[r][node]['edge_attr']
                         new_etype = path.add(rtype,etype)
-                        if new_etype is not 'null':
+                        if new_etype is not None:
                             print 'Adding edge',r,'->',child,'of type',new_etype
                             G.add_edge(r,child,edge_attr=new_etype)
                         else:

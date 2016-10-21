@@ -1,7 +1,9 @@
 ##Library to handle boolean networks in sufficient-necessary framework.
 ###Details of all the functions
-####gml2dot:
+####importlib.gml2dot:
 Takes a gml file in updated format and returns a networkx graph with only the needed edge and node properties.
+####importlib.read_boolean:
+Reads a set of Boolean rules and returns the graph with suitable edge properties. f<sup>A</sup> = B and C must be represented as A* = B and C. A combination of AND & OR rules must be neatly packed in brackets. Extra spaces and brackets cause the code to break. 
 ####gprops.importgraph:
 Returns a graph neatly read from a gml file in the updated format.
 ####gprops.set_edge_type:
