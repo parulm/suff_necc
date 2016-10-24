@@ -189,9 +189,24 @@ def sg_add(relationship,edge_type):
 	return sg_rel
 
 def find_sg_by_path(G,inode,onode):
-	route = nx.shortest_path(G,inode,onode)
+	if not nx.has_path(G,inode,onode):
+		#print 'No directed connection'
+		return None
+	if inode!=onode:
+		route = nx.shortest_path(G,inode,onode)
+	else:
+		#print 'Same source and sink, will pick the shortest path.'
+		roads = nx.all_simple_paths(G,inode,onode)
+		roads = list(roads)
+		path_list = sorted(roads, lambda x,y: 1 if len(x)>len(y) else -1 if len(x)<len(y) else 0)
+		#path_list = list(nx.all_simple_paths(G,inode,onode))
+		if len(path_list)<=1:
+			return None
+		route = path_list[1]
 	rel = 's/n'
+	#print 'We will be scanning',route
 	for i in range(len(route)-1):
+		#print 'You got into the edge scanning loop'
 		#print 'Looking at edge',route[i],'->',route[i+1]
 		etype = G[route[i]][route[i+1]]['edge_attr']
 		new_rel = path.add(rel,etype)
@@ -202,11 +217,14 @@ def find_sg_by_path(G,inode,onode):
 			#print 'Could not add the relationship with the edge type.'
 			#print 'Will look for subgraphs from',inode,'to',route[i+1]
 			srel = sg_add(rel,etype)
+			#print 'Adding',rel,'and',etype,'gives',srel
 			regs = G.predecessors(route[i+1])
 			#print 'Scanning the regulators'
 			if len(regs)<=1:
 				rel = None
+			#print 'We got',len(regs),'regulators of',route[i+1]
 			for r in regs:
+				#print 'You got into the regulator scanning loop'
 				#print 'Looking at regulator',r,'of',route[i+1]
 				if r == route[i]:
 					#print 'We came via this regulator, must skip this.'
@@ -215,6 +233,7 @@ def find_sg_by_path(G,inode,onode):
 					#print 'No path from',inode,'to',r
 					rel = None
 				for p in nx.all_simple_paths(G,inode,r):
+					#print 'You got into the paths to regulator scanning loop.'
 					ptype = path.path_type(G,p)
 					if ptype is None:
 						rel = None
@@ -222,6 +241,81 @@ def find_sg_by_path(G,inode,onode):
 					if sg_add(ptype,rtype)==srel:
 						#print 'Suitable path found. It is:',p,'of type',ptype
 						rel = srel
+						#print 'Subgraph is type',rel
+						if rel is not None:
+							break
 					else:
 						rel = None
+				if rel==None:
+					break
+				#print 'For regulator',r,'relationship is',rel
+	#print 'Just before returning, rel is',rel
+	return rel
+
+
+def find_sg_allpath(G,inode,onode):
+	rel = None
+	print 'scanning',onode
+	if not nx.has_path(G,inode,onode):
+		#print 'No directed connection'
+		return None
+	roads = nx.all_simple_paths(G,inode,onode)
+	roads = list(roads)
+	path_list = sorted(roads, lambda x,y: 1 if len(x)>len(y) else -1 if len(x)<len(y) else 0)
+	print 'we got',len(path_list),'routes to scan'
+	count = 1
+	for route in path_list:
+		print 'scanning route number', count
+		rel = 's/n'
+		print 'We will be scanning',route
+		for i in range(len(route)-1):
+			#print 'You got into the edge scanning loop'
+			#print 'Looking at edge',route[i],'->',route[i+1]
+			etype = G[route[i]][route[i+1]]['edge_attr']
+			new_rel = path.add(rel,etype)
+			if new_rel is not None:
+				rel = new_rel
+				continue
+			else:
+				#print 'Could not add the relationship with the edge type.'
+				#print 'Will look for subgraphs from',inode,'to',route[i+1]
+				srel = sg_add(rel,etype)
+				#print 'Adding',rel,'and',etype,'gives',srel
+				regs = G.predecessors(route[i+1])
+				#print 'Scanning the regulators'
+				if len(regs)<=1:
+					rel = None
+				#print 'We got',len(regs),'regulators of',route[i+1]
+				for r in regs:
+					#print 'You got into the regulator scanning loop'
+					#print 'Looking at regulator',r,'of',route[i+1]
+					if r == route[i]:
+						#print 'We came via this regulator, must skip this.'
+						continue
+					if not nx.has_path(G,inode,r):
+						#print 'No path from',inode,'to',r
+						rel = None
+					for p in nx.all_simple_paths(G,inode,r):
+						#print 'You got into the paths to regulator scanning loop.'
+						ptype = path.path_type(G,p)
+						if ptype is None:
+							rel = None
+							continue
+						rtype = G[r][route[i+1]]['edge_attr']
+						if sg_add(ptype,rtype)==srel:
+							#print 'Suitable path found. It is:',p,'of type',ptype
+							rel = srel
+							#print 'Subgraph is type',rel
+							if rel is not None:
+								break
+						else:
+							rel = None
+					if rel==None:
+						break
+					#print 'For regulator',r,'relationship is',rel
+		#print 'Just before returning, rel is',rel
+		count+=1
+		if rel is not None:
+			print 'path is:',route
+			return rel
 	return rel

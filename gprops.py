@@ -115,6 +115,10 @@ def set_node_type(G):
 	print 'Setting node types for all nodes'
 	print 'This function must be run after testing for Homogeneity!'
 	for node in G.nodes():
+		if len(G.predecessors(node))==0:
+			node_color = 'black'
+			continue
+		#print G.predecessors(node)
 		regulator = G.predecessors(node)[0]
 		ntype = G[regulator][node]['edge_attr']
 		if ntype=='s' or ntype=='ni':
@@ -130,6 +134,8 @@ def set_node_type(G):
 
 #Takes a graph and it's node and returns the node type. Node type is red if its' regulators are related by OR rule, blue if AND rule and black if the node takes a single regulator.
 def node_type(G,node):
+	if len(G.predecessors(node))==0:
+		return 'black'
 	regulator = G.predecessors(node)[0]
 	ntype = G[regulator][node]['edge_attr']
 	if ntype=='s' or ntype=='ni':
