@@ -126,9 +126,11 @@ def homog_pnode(G):
 	print 'Done'
 	return None
 
+#Same as pnode_collapse, but also collapses nodes that are not pseudo. Currently slightly modified to work well for the T-LGL network.
 def node_collapse(G):
 	print 'Collapsing pseudo nodes with suff/necc edges ...'
 	for node in G.nodes():
+		#Comment or modify the following if construct if you are using this function for any network other than LGL.
 		if node=='Apoptosis':
 			continue
 		s_list = G.successors(node)
@@ -154,9 +156,11 @@ def node_collapse(G):
 	print 'Done'
 	return G
 
+#Same as homog_pnode, but also collapses homogenous nodes that are not pseudo. Current version for LGL network.
 def homog_node(G):
 	print 'Collapsing nodes with only one outgoing edge and the type of incoming edges is the same as the outgoing one ...'
 	for node in G.nodes():
+		#Comment or modify the following if construct if you are using this function for any network other than LGL.
 		if node=='Apoptosis':
 			continue
 		ntype = gprops.node_type(G,node)

@@ -4,6 +4,7 @@ import networkx as nx
 import pydot
 import graphviz
 
+#Creates a node. Function for use by other functions, you can ignore this for most part.
 def create_node(G,node,node_list):
 	#print 'Creating node',node
 	G.add_node(node)
@@ -13,7 +14,7 @@ def create_node(G,node,node_list):
 	node_list[1].append(0)
 	return True
 
-
+#Reads and returns a network from a list of boolean functions. In older versions of this repo, this code is under the file and_or.py.
 def read_boolean(filename):
 	print 'Creating graph from Boolean rules in',filename,'...'
 	G=nx.DiGraph()
@@ -132,7 +133,7 @@ def read_boolean(filename):
 	print 'Done.'
 	return G
 
-
+#Reads and returns graph from a gml file in the updated gml format.
 def gml2dot(fname):
 
 	print 'Importing graph from', fname,'...'

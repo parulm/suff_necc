@@ -255,19 +255,19 @@ def find_sg_by_path(G,inode,onode):
 
 def find_sg_allpath(G,inode,onode):
 	rel = None
-	print 'scanning',onode
+	#print 'scanning',onode
 	if not nx.has_path(G,inode,onode):
 		#print 'No directed connection'
 		return None
 	roads = nx.all_simple_paths(G,inode,onode)
 	roads = list(roads)
 	path_list = sorted(roads, lambda x,y: 1 if len(x)>len(y) else -1 if len(x)<len(y) else 0)
-	print 'we got',len(path_list),'routes to scan'
+	#print 'we got',len(path_list),'routes to scan'
 	count = 1
 	for route in path_list:
-		print 'scanning route number', count
+		#print 'scanning route number', count
 		rel = 's/n'
-		print 'We will be scanning',route
+		#print 'We will be scanning',route
 		for i in range(len(route)-1):
 			#print 'You got into the edge scanning loop'
 			#print 'Looking at edge',route[i],'->',route[i+1]

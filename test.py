@@ -13,6 +13,30 @@ G = nx.DiGraph()
 G = importlib.gml2dot(fname)
 
 gprops.set_edge_type(G)
+gprops.set_node_type(G)
+
+gprops.update_graph(G,'IL15','ON')
+gprops.update_graph(G,'PDGF','OFF')
+
+gprops.remove_stray(G)
+
+reduction.node_collapse(G)
+reduction.homog_node(G)
+reduction.edge_red(G)
+reduction.homog_node(G)
+reduction.edge_red(G)
+gprops.set_edge_props(G)
+gprops.lone_reg(G)
+reduction.node_collapse(G)
+gprops.lone_reg(G)
+reduction.homog_node(G)
+
+gprops.set_edge_props(G)
+
+
+#outf = '/home/parul/codes/test_networks/source_status/bycode/reduced/LGL_new_red3_1_il15ON.graphml'
+#nx.write_graphml(G,outf)
+
 '''
 gprops.set_node_type(G)
 
@@ -21,7 +45,7 @@ reduction.homog_node(G)
 reduction.node_collapse(G)
 
 gprops.set_edge_props(G)
-'''
+
 nodelist = [[],[],[]]
 nodelist[0] = G.nodes()
 l = len(nodelist[0])
@@ -29,15 +53,78 @@ for i in range(l):
 	nodelist[1].append(0)
 	nodelist[2].append('null')
 
-print subgraph.find_sg_allpath(G,'Stimuli','Apoptosis')
+
+G.remove_edge('Ceramide','S1P')
+
+gprops.update_graph(G,'S1P','ON')
+gprops.lone_reg(G)
+
+gprops.remove_stray(G)
+gprops.set_edge_props(G)
+
+reduction.homog_node(G)
+reduction.edge_red(G)
+reduction.homog_node(G)
+gprops.set_edge_props(G)
+gprops.lone_reg(G)
+reduction.node_collapse(G)
+
+gprops.set_edge_props(G)
+
+G.remove_edge('TBET','IFNG')
+gprops.update_graph(G,'IFNG','ON')
+
+gprops.lone_reg(G)
+
+gprops.remove_stray(G)
+
+
+reduction.homog_node(G)
+reduction.edge_red(G)
+#gprops.set_edge_props(G)
+#reduction.homog_node(G)
+#reduction.node_collapse(G)
+
+gprops.set_edge_props(G)
+'''
+G.remove_edge('IL2RB','RAS')
+gprops.update_graph(G,'RAS','ON')
+
+gprops.lone_reg(G)
+
+gprops.remove_stray(G)
+
+
+reduction.homog_node(G)
+reduction.edge_red(G)
+reduction.homog_node(G)
+gprops.lone_reg(G)
+
+
+gprops.set_edge_props(G)
+
+G.remove_edge('Ceramide','S1P')
+
+gprops.update_graph(G,'S1P','ON')
+gprops.lone_reg(G)
+
+gprops.remove_stray(G)
+gprops.set_edge_props(G)
+
+#print subgraph.find_sg_allpath(G,'IL2RB','IL2RB')
+
 '''
 for source in G.nodes():
 	print 'Scanning',source
-	sg = subgraph.find_sg_by_path(G,source,source)
+	sg = subgraph.find_sg_allpath(G,source,source)
 	if sg is not None:
 		print source,sg
+'''
 
+outfnew = '/home/parul/codes/test_networks/source_status/bycode/reduced/temp.graphml'
+nx.write_graphml(G,outfnew)
 
+'''
 #print subgraph.find_sg_allpath(G,'Ceramide','Apoptosis')
 
 
