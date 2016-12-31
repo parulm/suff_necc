@@ -1,3 +1,5 @@
+#Header comment(s): 1. The subgraph finding method assumes the first edge of the path as the relationship type. It does not explore the possibility of first edge itself being the subgraph e.g., the first edge is n, the next node has one more n regulator and the source is sufficient for this regulator but since we start scanning from the first edge, it just tries to find an n relationship. This is a crucial problem for finding subgraphs from multiple nodes to multiple nodes.
+
 import networkx as nx
 
 import importlib
@@ -329,3 +331,64 @@ def find_sg_allpath(G,inode,onode):
 				print 'It was a subgraph!'
 			return rel
 	return rel
+
+
+#Finds subgraphs from a group of nodes to another group of nodes. Useful to find motifs with multiple number of driver nodes. The reltypes and oldreltypes lists are important. Add comments on the entire code of this function. Test running this function made me realize some flaw in the general subgraph finding method. See header comment 1.
+def find_sg_multiple(G,inode_list,onode_list):
+	#print 'Input node list:',inode_list
+	#print 'Output node list:', onode_list
+	#start = inode_list[0]
+	oldreltypes = ['s','n','si','ni','s/n','s/ni']
+	for stop in onode_list:
+		reltypes = []
+		for start in inode_list:
+			#print 'start is:', start, 'stop is:', stop
+			roads = nx.all_simple_paths(G,start,stop)
+			roads = list(roads)
+			path_list = sorted(roads, lambda x,y: 1 if len(x)>len(y) else -1 if len(x)<len(y) else 0)
+			if len(path_list)>1:
+				if start==stop:
+					route = path_list[1]
+				else:
+					route = path_list[0]
+			else:
+				continue
+			prev_rel = 's/n'
+			#print 'Looking at path',route
+			for i in range(len(route)-1):
+				etype = G[route[i]][route[i+1]]['edge_attr']
+				rel = path.add(prev_rel,etype)
+				if rel == None:
+					#print 'Path cannot be added at',route[i],'to',route[i+1]
+					srel = sg_add(prev_rel,etype)
+					regs = G.predecessors(route[i+1])
+					if len(regs)<=1:
+						rel = None
+					for regulator in regs:
+						if regulator == route[i]:
+							continue
+						found = False
+						for source in inode_list:
+							if not nx.has_path(G,source,regulator):
+								continue
+							for p in nx.all_simple_paths(G,source,regulator):
+								ptype = path.path_type(G,p)
+								rtype = G[regulator][route[i+1]]['edge_attr']
+								if sg_add(ptype,rtype) == srel:
+									found = True
+									break
+							if found:
+								break
+						if found:
+							continue
+						else:
+							rel = None
+					rel = srel
+				prev_rel = rel
+			reltypes.append(rel)
+		#print 'for end point',stop,'stored relationships are:',reltypes
+		oldreltypes = list(set(reltypes) & set(oldreltypes))
+	return oldreltypes
+
+
+
