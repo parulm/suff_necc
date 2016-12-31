@@ -3,11 +3,6 @@
 ####importlib.gml2dot:
 Takes a gml file in updated format and returns a networkx graph with only the needed edge and node properties.
 ####importlib.read_boolean:
-<<<<<<< HEAD
-Reads a set of Boolean rules and returns the graph with suitable edge properties. f<sub>A</sub> = B and C must be represented as A* = B and C. A combination of AND & OR rules must be neatly packed in brackets. Extra spaces and brackets cause the code to break. 
-=======
-Reads a set of Boolean rules and returns the graph with suitable edge properties. f<sup>A</sup> = B and C must be represented as A* = B and C. A combination of AND & OR rules must be neatly packed in brackets. Extra spaces and brackets cause the code to break. 
->>>>>>> aaeb41739ca3256fc6ba7d16f0ee9fff36b92068
 ####gprops.importgraph:
 Returns a graph neatly read from a gml file in the updated format.
 ####gprops.set_edge_type:
