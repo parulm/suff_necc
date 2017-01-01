@@ -7,11 +7,7 @@ import subgraph
 import reduction
 
 #fname = '/home/parul/codes/test_networks/LGL_subset.gml'
-<<<<<<< HEAD
 fname = '/home/parul/codes/test_networks/EMT.txt'
-=======
-fname = '/home/parul/codes/test_networks/LGL_new.txt'
->>>>>>> aaeb41739ca3256fc6ba7d16f0ee9fff36b92068
 G = nx.DiGraph()
 
 #G = importlib.gml2dot(fname)
@@ -19,11 +15,7 @@ G = importlib.read_boolean(fname)
 
 gprops.set_edge_type(G)
 gprops.set_node_type(G)
-<<<<<<< HEAD
-'''
-=======
 
->>>>>>> aaeb41739ca3256fc6ba7d16f0ee9fff36b92068
 reduction.edge_red(G)
 gprops.lone_reg(G)
 reduction.node_red(G)
@@ -40,7 +32,7 @@ reduction.edge_red(G)
 gprops.lone_reg(G)
 reduction.homog_node(G)
 gprops.lone_reg(G)
-<<<<<<< HEAD
+
 '''
 gprops.set_edge_props(G)
 
@@ -56,15 +48,6 @@ for source in G.nodes():
 #motifs = ['GLI','beta_catenin_membrane','E-cadherin','MEK','AXIN2','GSK3beta','beta_catenin_nuc','SMAD','SNAI1','SNAI2','Dest_compl','ZEB1']
 #outfname = '/home/parul/codes/test_networks/EMT/reduced.graphml'
 #nx.write_graphml(G,outfname)
-=======
-
-gprops.set_edge_props(G)
-
-outfname = '/home/parul/codes/test_networks/LGL_new_red_temp.graphml'
-nx.write_graphml(G,outfname)
->>>>>>> aaeb41739ca3256fc6ba7d16f0ee9fff36b92068
-
-
 
 '''
 nodelist = [[],[],[]]
