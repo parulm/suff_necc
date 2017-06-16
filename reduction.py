@@ -20,7 +20,7 @@ def edge_red(G):
 			if len(route)<=2:
 				continue
 			if path.path_type(G,route)==uv_type:
-				print 'Removing edge between',u,'and',v,'by logical transitive reduction'
+				print 'Removing edge between',u,'and',v,'by logical transitive reduction because the path',route, 'is also', uv_type
 				G.remove_edge(u,v)
 				break
 			else:
@@ -44,9 +44,11 @@ def node_red(G,critical=[]):
 				break
 			parent_relationship = G[parent][node]['edge_attr']
 			child_relationship = G[node][child]['edge_attr']
-			if parent_relationship==child_relationship:
+			total_rel = path.add(parent_relationship,child_relationship)
+			print 'Looking at node', node, 'with parent', parent,'and child', child, 'and total rel', total_rel, 'obtained by adding', parent_relationship, 'and', child_relationship
+			if total_rel is not None:
 				nodename = G.node[node]['label']
-				G.add_edge(parent,child,edge_attr=parent_relationship)
+				G.add_edge(parent,child,edge_attr=total_rel)
 				print 'Removing node',node
 				G.remove_node(node)
 				#Uncomment the following 4 lines and comment the above 3 if you want to reduce only pseudo nodes

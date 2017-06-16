@@ -34,9 +34,9 @@ def set_edge_type(G):
 				G[u][v]['edge_attr']='ni'
 		elif col=='black':
 			if etype=='normal':
-				G[u][v]['edge_attr']='s/n'
+				G[u][v]['edge_attr']='sn'
 			elif etype=='tee':
-				G[u][v]['edge_attr']='s/ni'
+				G[u][v]['edge_attr']='sni'
 	print 'Done.'            
 	return G
 
@@ -90,6 +90,7 @@ def set_edge_props(G):
 		regulators = G.predecessors(node)
 		for r in regulators:
 			etype = G[r][node]['edge_attr']
+			#print etype
 			if etype=='s':
 				G[r][node]['color']='red'
 				G[r][node]['arrowhead']='normal'
@@ -102,12 +103,14 @@ def set_edge_props(G):
 			elif etype=='ni':
 				G[r][node]['color']='blue'
 				G[r][node]['arrowhead']='tee'
-			elif etype=='s/n':
+			elif etype=='sn':
 				G[r][node]['color']='black'
 				G[r][node]['arrowhead']='normal'
-			elif etype=='s/ni':
+			elif etype=='sni':
 				G[r][node]['color']='black'
 				G[r][node]['arrowhead']='tee'
+			else:
+				print 'warning: edge',r,'->',node, 'marked as',etype
 	print 'Done.'
 	return None
 
@@ -126,7 +129,7 @@ def set_node_type(G):
 			node_color = 'red'
 		elif ntype=='n' or ntype=='si':
 			node_color = 'blue'
-		elif ntype=='s/n' or ntype=='s/ni':
+		elif ntype=='sn' or ntype=='sni':
 			node_color = 'black'
 		
 		G.node[node]['ncolor']=node_color
@@ -143,7 +146,7 @@ def node_type(G,node):
 		node_color = 'red'
 	elif ntype=='n' or ntype=='si':
 		node_color = 'blue'
-	elif ntype=='s/n' or ntype=='s/ni':
+	elif ntype=='sn' or ntype=='sni':
 		node_color = 'black'
 	return node_color
 
@@ -158,12 +161,12 @@ def lone_reg(G):
 		regs = G.predecessors(node)
 		if len(regs)==1:
 			parent = regs[0]
-			if G[parent][node]['edge_attr']=='s/n' or G[parent][node]['edge_attr']=='s/ni':
+			if G[parent][node]['edge_attr']=='sn' or G[parent][node]['edge_attr']=='sni':
 				continue
 			if G[parent][node]['arrowhead']=='normal':
-				newt = 's/n'
+				newt = 'sn'
 			elif G[parent][node]['arrowhead']=='tee':
-				newt = 's/ni'
+				newt = 'sni'
 			print 'Setting edge',parent,'->',node, 'as',newt
 			G[parent][node]['edge_attr']=newt
 			
@@ -195,17 +198,17 @@ def update_graph(G,node,node_status):
 						parent = p
 				arrtype = G[parent][child]['arrowhead']
 				if arrtype=='normal':
-					print 'Setting',parent,'->',child,'as s/n'
-					G[parent][child]['edge_attr'] = 's/n'
+					print 'Setting',parent,'->',child,'as sn'
+					G[parent][child]['edge_attr'] = 'sn'
 				elif arrtype=='tee':
-					print 'Setting',parent,'->',child,'as s/ni'
-					G[parent][child]['edge_attr'] = 's/ni'
+					print 'Setting',parent,'->',child,'as sni'
+					G[parent][child]['edge_attr'] = 'sni'
 				else:
 					print 'Error! Set edge properties first. Use function gprops.set_edge_props'
 			if crel=='red' or crel=='black':
-				if G[node][child]['edge_attr']=='s' or G[node][child]['edge_attr']=='s/n':
+				if G[node][child]['edge_attr']=='s' or G[node][child]['edge_attr']=='sn':
 					update_graph(G,child,'ON')
-				elif G[node][child]['edge_attr']=='si' or G[node][child]['edge_attr']=='s/ni':
+				elif G[node][child]['edge_attr']=='si' or G[node][child]['edge_attr']=='sni':
 					update_graph(G,child,'OFF')
 			#set all sufficiently related children to their updated state. Use a nodelist or use this function recursively.
 	elif node_status=='OFF':
@@ -222,15 +225,15 @@ def update_graph(G,node,node_status):
 						parent = p
 				arrtype = G[parent][child]['arrowhead']
 				if arrtype=='normal':
-					G[parent][child]['edge_attr'] = 's/n'
+					G[parent][child]['edge_attr'] = 'sn'
 				elif arrtype=='tee':
-					G[parent][child]['edge_attr'] = 's/ni'
+					G[parent][child]['edge_attr'] = 'sni'
 				else:
 					print 'Error! Set edge properties first. Use function gprops.set_edge_props'
 			if crel=='blue' or crel=='black':
-				if G[node][child]['edge_attr']=='n' or G[node][child]['edge_attr']=='s/n':
+				if G[node][child]['edge_attr']=='n' or G[node][child]['edge_attr']=='sn':
 					update_graph(G,child,'OFF')
-				elif G[node][child]['edge_attr']=='ni' or G[node][child]['edge_attr']=='s/ni':
+				elif G[node][child]['edge_attr']=='ni' or G[node][child]['edge_attr']=='sni':
 					update_graph(G,child,'ON')
 			#set all necessarily related children to ...
 	else:

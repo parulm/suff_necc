@@ -4,10 +4,10 @@ import networkx as nx
 
 #Adds two types of relationships. The order is important here, preceding type is relationship while the succeeding one is edge_type. All not-addable pairs return null which can be used to check for subgraphs.
 def add(relationship,edge_type):
-	if relationship=='s/n':
+	if relationship=='sn':
 		return edge_type
 	
-	elif edge_type=='s/n':
+	elif edge_type=='sn':
 		return relationship
 	
 	elif relationship=='s':
@@ -15,7 +15,7 @@ def add(relationship,edge_type):
 			return 's'
 		elif edge_type=='si':
 			return 'si'
-		elif edge_type=='s/ni':
+		elif edge_type=='sni':
 			return 'si'
 		else:
 			return None
@@ -25,7 +25,7 @@ def add(relationship,edge_type):
 			return 'n'
 		elif edge_type=='ni':
 			return 'ni'
-		elif edge_type=='s/ni':
+		elif edge_type=='sni':
 			return 'ni'
 		else:
 			return None
@@ -35,7 +35,7 @@ def add(relationship,edge_type):
 			return 'si'
 		elif edge_type=='ni':
 			return 's'
-		elif edge_type=='s/ni':
+		elif edge_type=='sni':
 			return 's'
 		else:
 			return None
@@ -45,12 +45,12 @@ def add(relationship,edge_type):
 			return 'ni'
 		elif edge_type=='si':
 			return 'n'
-		elif edge_type=='s/ni':
+		elif edge_type=='sni':
 			return 'n'
 		else:
 			return None
 		
-	elif relationship=='s/ni':
+	elif relationship=='sni':
 		if edge_type=='s':
 			return 'si'
 		elif edge_type=='n':
@@ -59,8 +59,8 @@ def add(relationship,edge_type):
 			return 'n'
 		elif edge_type=='ni':
 			return 's'
-		elif edge_type=='s/ni':
-			return 's/n'
+		elif edge_type=='sni':
+			return 'sn'
 		else:
 			return None
 	
@@ -71,7 +71,7 @@ def add(relationship,edge_type):
 #Possible fix: Can add a has_edge function at every iteration.
 def path_type(G, path):
 	l = len(path)
-	relationship = 's/n'
+	relationship = 'sn'
 	for i in range(l-1):
 		u = path[i]
 		v = path[i+1]

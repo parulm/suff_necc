@@ -38,7 +38,7 @@ def find_sg(G,inode,onode,nodelist,rasta):
 			#	continue
 			#print 'Inside route scanning'
 			print 'Looking at path:', route
-			rel = 's/n'
+			rel = 'sn'
 			for i in range(len(route)-1):
 				if rel is None:
 					print 'There is no relationship on this path, will look at other paths now.'
@@ -166,7 +166,7 @@ def is_subgraph(G,source,target,reg,rel,nodelist):
 #Returns the possible kind of subgraph we can have if we have edge_type edge preceded by path / subgraph of type relationship. This function is used at multiple points in this and other files.
 def sg_add(relationship,edge_type):
 	if path.add(relationship,edge_type)!=None:
-		#print 'Error running sg_add. It seems there is a path while you are trying to look for a subgraph'
+		print 'Error running sg_add. It seems there is a path while you are trying to look for a subgraph. The types are:',relationship,'and',edge_type
 		return None
 	else:
 		if relationship=='s':
@@ -192,6 +192,7 @@ def sg_add(relationship,edge_type):
 		else:
 			sg_rel = None
 			#print 'You seem to have a typo, new edge attribute or broken code!'
+			print 'Error while processing',relationship,'as relationship and',edge_type,'as edge_type'
 	return sg_rel
 
 #Finds the shortest path between inode and onode. Try to add each edge of that path sequentially. If at a point, you cannot add the edge, try to find paths to each of the regulators, if yes, fine, else no subgraph. Finds only simple subgraphs. SOMEWHAT based on the idea that if there is a subgraph of one type between a pair of nodes, there cannot be a subgraph of a different type.
@@ -262,21 +263,24 @@ def find_sg_by_path(G,inode,onode):
 #Does the same as find_sg_by_path but scans all paths instead of scanning just the shortest one. It breaks and returns as soon as it finds a subgraph (doesn't scan the other paths). This is troublesome for scanning nodes which are driver nodes for more than one motif. I THINK it should be fine for finding subgraphs between different nodes on the basis of Proposition 6 (from theory) being true.
 def find_sg_allpath(G,inode,onode):
 	issg = False
-	rel = None
+	rel = 'sn'
 	#print 'scanning',onode
 	if not nx.has_path(G,inode,onode):
-		#print 'No directed connection'
+		print 'No directed connection'
 		return None
 	roads = nx.all_simple_paths(G,inode,onode)
 	roads = list(roads)
 	path_list = sorted(roads, lambda x,y: 1 if len(x)>len(y) else -1 if len(x)<len(y) else 0)
-	#print 'we got',len(path_list),'routes to scan'
+	print 'we got',len(path_list),'routes to scan'
 	count = 1
 	for route in path_list:
 		#print 'scanning route number', count
-		rel = 's/n'
-		#print 'We will be scanning',route
+		rel = 'sn'
+		print 'We will be scanning',route
+		pgood = True
 		for i in range(len(route)-1):
+			if not pgood:
+				break
 			#print 'You got into the edge scanning loop'
 			#print 'Looking at edge',route[i],'->',route[i+1]
 			etype = G[route[i]][route[i+1]]['edge_attr']
@@ -286,31 +290,44 @@ def find_sg_allpath(G,inode,onode):
 				continue
 			else:
 				issg = True
-				#print 'Could not add the relationship with the edge type.'
-				#print 'Will look for subgraphs from',inode,'to',route[i+1]
+				print 'Could not add the relationship with the edge type.'
+				print 'Will look for subgraphs from',inode,'to',route[i+1]
+				#print 'rel is',rel
 				srel = sg_add(rel,etype)
-				#print 'Adding',rel,'and',etype,'gives',srel
+				print 'Adding',rel,'and',etype,'gives',srel
 				regs = G.predecessors(route[i+1])
-				#print 'Scanning the regulators'
+				print 'Scanning the regulators'
 				if len(regs)<=1:
 					rel = None
-				#print 'We got',len(regs),'regulators of',route[i+1]
+				print 'We got',len(regs),'regulators of',route[i+1]
 				for r in regs:
-					#print 'You got into the regulator scanning loop'
-					#print 'Looking at regulator',r,'of',route[i+1]
+					if not pgood:
+						break
+					pgood = True
+					print 'You got into the regulator scanning loop'
+					print 'Looking at regulator',r,'of',route[i+1]
 					if r == route[i]:
-						#print 'We came via this regulator, must skip this.'
+						print 'We came via this regulator, must skip this.'
+						#pgood = False
 						continue
 					if not nx.has_path(G,inode,r):
-						#print 'No path from',inode,'to',r
+						print 'No path from',inode,'to',r
 						rel = None
+						pgood = False
+						continue
 					for p in nx.all_simple_paths(G,inode,r):
 						#print 'You got into the paths to regulator scanning loop.'
 						ptype = path.path_type(G,p)
 						if ptype is None:
+							#print 'this path does not work, will look at next'
 							rel = None
 							continue
+						print 'Path',p,'worked, it is of type', ptype
 						rtype = G[r][route[i+1]]['edge_attr']
+						if path.add(ptype,rtype) is not None:
+							print 'Oops! this will not give a logic subgraph'
+							continue
+						print 'there is edge of type',rtype,'between',r,'and',route[i+1]
 						if sg_add(ptype,rtype)==srel:
 							#print 'Suitable path found. It is:',p,'of type',ptype
 							rel = srel
@@ -320,16 +337,20 @@ def find_sg_allpath(G,inode,onode):
 						else:
 							rel = None
 					if rel==None:
-						break
+						continue
+				if rel == None:
+					#this means that none of the regulators can give us a path
+					pgood = False
 					#print 'For regulator',r,'relationship is',rel
 		#print 'Just before returning, rel is',rel
 		count+=1
 		if rel is not None:
 			print 'path is:',route
-			#print 'with relationship', rel
+			print 'with relationship', rel
 			if issg:
 				print 'It was a subgraph!'
-			return rel
+				print rel
+			#return rel
 	return rel
 
 
@@ -338,7 +359,7 @@ def find_sg_multiple(G,inode_list,onode_list):
 	#print 'Input node list:',inode_list
 	#print 'Output node list:', onode_list
 	#start = inode_list[0]
-	oldreltypes = ['s','n','si','ni','s/n','s/ni']
+	oldreltypes = ['s','n','si','ni','sn','sni']
 	for stop in onode_list:
 		reltypes = []
 		for start in inode_list:
@@ -353,7 +374,7 @@ def find_sg_multiple(G,inode_list,onode_list):
 					route = path_list[0]
 			else:
 				continue
-			prev_rel = 's/n'
+			prev_rel = 'sn'
 			#print 'Looking at path',route
 			for i in range(len(route)-1):
 				etype = G[route[i]][route[i+1]]['edge_attr']

@@ -37,7 +37,7 @@ def read_boolean(filename):
 			node_list[1][ind] = 1
 			#put this node in the list of nodes and mark update function as known
 		else:
-			print ('Please check the syntax')
+			print 'Please check the syntax for', words
 			break
 		if words[1]=='=':
 			j=2
