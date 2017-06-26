@@ -8,6 +8,7 @@ temp.py
 sg_run.py
 sgs.py
 signals.py
+infer.py
 reduce_run.py
 newtest.py
 EMT_run.py
