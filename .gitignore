@@ -2,4 +2,12 @@
 *.swp
 *.pyc
 *.txt
-test*
+*.sh
+test.py
+temp.py
+sg_run.py
+sgs.py
+signals.py
+reduce_run.py
+newtest.py
+EMT_run.py
