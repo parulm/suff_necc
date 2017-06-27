@@ -12,3 +12,5 @@ infer.py
 reduce_run.py
 newtest.py
 EMT_run.py
+parser.out
+parsetab.py
