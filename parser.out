@@ -1,0 +1,208 @@
+Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> rule
+Rule 1     rule -> ID ASSIGN expression
+Rule 2     expression -> expression AND term
+Rule 3     expression -> expression OR term
+Rule 4     expression -> term
+Rule 5     term -> NOT term
+Rule 6     term -> ID
+Rule 7     term -> LPAREN expression RPAREN
+
+Terminals, with rules where they appear
+
+AND                  : 2
+ASSIGN               : 1
+ID                   : 1 6
+LPAREN               : 7
+NOT                  : 5
+OR                   : 3
+RPAREN               : 7
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 3 7
+rule                 : 0
+term                 : 2 3 4 5
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . rule
+    (1) rule -> . ID ASSIGN expression
+
+    ID              shift and go to state 1
+
+    rule                           shift and go to state 2
+
+state 1
+
+    (1) rule -> ID . ASSIGN expression
+
+    ASSIGN          shift and go to state 3
+
+
+state 2
+
+    (0) S' -> rule .
+
+
+
+state 3
+
+    (1) rule -> ID ASSIGN . expression
+    (2) expression -> . expression AND term
+    (3) expression -> . expression OR term
+    (4) expression -> . term
+    (5) term -> . NOT term
+    (6) term -> . ID
+    (7) term -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 7
+    ID              shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    term                           shift and go to state 4
+    expression                     shift and go to state 8
+
+state 4
+
+    (4) expression -> term .
+
+    AND             reduce using rule 4 (expression -> term .)
+    OR              reduce using rule 4 (expression -> term .)
+    $end            reduce using rule 4 (expression -> term .)
+    RPAREN          reduce using rule 4 (expression -> term .)
+
+
+state 5
+
+    (6) term -> ID .
+
+    AND             reduce using rule 6 (term -> ID .)
+    OR              reduce using rule 6 (term -> ID .)
+    $end            reduce using rule 6 (term -> ID .)
+    RPAREN          reduce using rule 6 (term -> ID .)
+
+
+state 6
+
+    (7) term -> LPAREN . expression RPAREN
+    (2) expression -> . expression AND term
+    (3) expression -> . expression OR term
+    (4) expression -> . term
+    (5) term -> . NOT term
+    (6) term -> . ID
+    (7) term -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 7
+    ID              shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    term                           shift and go to state 4
+    expression                     shift and go to state 9
+
+state 7
+
+    (5) term -> NOT . term
+    (5) term -> . NOT term
+    (6) term -> . ID
+    (7) term -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 7
+    ID              shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    term                           shift and go to state 10
+
+state 8
+
+    (1) rule -> ID ASSIGN expression .
+    (2) expression -> expression . AND term
+    (3) expression -> expression . OR term
+
+    $end            reduce using rule 1 (rule -> ID ASSIGN expression .)
+    AND             shift and go to state 11
+    OR              shift and go to state 12
+
+
+state 9
+
+    (7) term -> LPAREN expression . RPAREN
+    (2) expression -> expression . AND term
+    (3) expression -> expression . OR term
+
+    RPAREN          shift and go to state 13
+    AND             shift and go to state 11
+    OR              shift and go to state 12
+
+
+state 10
+
+    (5) term -> NOT term .
+
+    AND             reduce using rule 5 (term -> NOT term .)
+    OR              reduce using rule 5 (term -> NOT term .)
+    $end            reduce using rule 5 (term -> NOT term .)
+    RPAREN          reduce using rule 5 (term -> NOT term .)
+
+
+state 11
+
+    (2) expression -> expression AND . term
+    (5) term -> . NOT term
+    (6) term -> . ID
+    (7) term -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 7
+    ID              shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    term                           shift and go to state 14
+
+state 12
+
+    (3) expression -> expression OR . term
+    (5) term -> . NOT term
+    (6) term -> . ID
+    (7) term -> . LPAREN expression RPAREN
+
+    NOT             shift and go to state 7
+    ID              shift and go to state 5
+    LPAREN          shift and go to state 6
+
+    term                           shift and go to state 15
+
+state 13
+
+    (7) term -> LPAREN expression RPAREN .
+
+    AND             reduce using rule 7 (term -> LPAREN expression RPAREN .)
+    OR              reduce using rule 7 (term -> LPAREN expression RPAREN .)
+    $end            reduce using rule 7 (term -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 7 (term -> LPAREN expression RPAREN .)
+
+
+state 14
+
+    (2) expression -> expression AND term .
+
+    AND             reduce using rule 2 (expression -> expression AND term .)
+    OR              reduce using rule 2 (expression -> expression AND term .)
+    $end            reduce using rule 2 (expression -> expression AND term .)
+    RPAREN          reduce using rule 2 (expression -> expression AND term .)
+
+
+state 15
+
+    (3) expression -> expression OR term .
+
+    AND             reduce using rule 3 (expression -> expression OR term .)
+    OR              reduce using rule 3 (expression -> expression OR term .)
+    $end            reduce using rule 3 (expression -> expression OR term .)
+    RPAREN          reduce using rule 3 (expression -> expression OR term .)
+
