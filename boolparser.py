@@ -1,11 +1,8 @@
-# Yacc example
-
+# Compiler for constructing a causal logic network from boolean rules
 import ply.yacc as yacc
 import networkx as nx
-
 # Get the token map from the lexer.
 from tokenizer import tokens
-#from tokenizer import tokenize
 
 
 def new_node(node, network):
