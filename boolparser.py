@@ -119,24 +119,30 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
-#Read from file
+def readfile(filename):
+	f = open(filename, 'r')
+	text = f.read()
+	text_iter = iter(text.splitlines())
+	#run the parser for each line in the file
+	for s in text_iter:
+		edges = {}
+		parser.parse(s)
+
+	#invert the color of inhibitory edges
+	for e in G.edges_iter(data=True):
+		if G[e[0]][e[1]]['arrowhead'] == 'tee':
+			colorswap(e,G)
+	
+	return G
+
+'''
 ifile = '/home/parul/Dropbox/codes/rules/forply/main.txt'
-f = open(ifile, 'r')
-text = f.read()
-text_iter = iter(text.splitlines())
 
-#run the parser for each line in the file
-for s in text_iter:
-	edges = {}
-	parser.parse(s)
-
-#invert the color of inhibitory edges
-for e in G.edges_iter(data=True):
-	if G[e[0]][e[1]]['arrowhead'] == 'tee':
-		colorswap(e,G)
+G = readfile(ifile)
 
 #Write to a graph
 gfile = '/home/parul/Dropbox/codes/EMT_complt/byply/main.graphml'
-nx.write_graphml(G,gfile)
+#nx.write_graphml(G,gfile)
 
 print 'Graph created at', gfile
+'''

@@ -7,12 +7,6 @@ from time import sleep
 
 import importlib
 
-#Returns a graph neatly read from a gml file in the updated format. Ref: stackoverflow: 32895291. Use gml_format.sh to correct the format.
-def importgraph(file_name):
-	G = nx.DiGraph()
-	G = importlib.gml2dot(file_name)
-	return G
-
 #Setting the edge attribute so that every time we do not have to read and combine both color and arrowhead type. This function reads a graph and sets a new edge attribute named edge_attr to s/n, s/ni, s, n, si or ni. It returns the edited graph. The returned graph may or may not be used; thanks to automatic pass by reference in python.
 def set_edge_type(G):
 	print 'Setting edge attribute from color and arrow types ...'
