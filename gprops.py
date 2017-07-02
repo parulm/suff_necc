@@ -170,10 +170,6 @@ def lone_reg(G):
 #Takes a graph, a node and the initial / fixed state we are setting the node to. This function by itself updates everything that logically follows from the fixed state of the given node. This might leave some stray nodes though.
 def update_graph(G,node,node_status):
 	print 'Setting',node,'to',node_status
-	if node=='Apoptosis':
-		print 'WOAH WOAH WOAH!!! WAIT!!!!! You just got Apoptosis!'
-		print 'Giving you a couple seconds to grasp what just happened'
-		sleep(3)
 	if node not in G.nodes():
 		print 'Error!',node,'not in the graph.'
 		return None
