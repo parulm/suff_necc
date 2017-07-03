@@ -1,4 +1,10 @@
-MIT License
+Note there is a third party package included, goverened by 
+the license below and has different copyrights.
+
+ply: GNU Lesser General Public License, Copyright (C) 2001-2007, David M. Beazley
+
+
+The rest of the software is licensed with the MIT Open Source License
 
 Copyright (c) 2016-2017 Parul Maheshwari and Réka Albert
 
