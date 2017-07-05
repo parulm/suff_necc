@@ -1,4 +1,4 @@
-## Library to handle boolean networks in sufficient-necessary framework.
+## Library to analyze boolean networks in causal logic framework.
 ### Details of all the functions
 #### boolparser.readfile:
 Constructs the causal logic representation of a network from Boolean rules. Assigns color and edge (tail) type to a regulator on the basis of the Boolean rule.
