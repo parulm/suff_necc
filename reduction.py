@@ -45,3 +45,58 @@ def node_collapse(G,critical=[]):
 			rlist.append(e)
 	for r in rlist:
 		G.remove_node(r[0])
+
+
+#Collapses two non critical nodes (or one critical node with another non critical node) if they have the same set of in- and out-neighbors with equal corresponding logic implications
+def LVC(G, critical=[]):
+	toremove = []
+	for n1 in G.nodes():
+		if n1 in toremove:
+			continue
+		for n2 in G.nodes():
+			if n2 in toremove:
+				continue
+			if n1==n2:
+				continue
+			else:
+				regs1 = G.predecessors(n1)
+				regs2 = G.predecessors(n2)
+				targets1 = G.successors(n1)
+				targets2 = G.successors(n2)
+				flag = False
+				if set(regs1)==set(regs2) and set(targets1)==set(targets2):
+					flag = True
+					for reg in regs1:
+						if G[reg][n1]['edge_attr']!=G[reg][n2]['edge_attr']:
+							flag = False
+							break
+					for target in targets1:
+						if G[n1][target]['edge_attr']!=G[n2][target]['edge_attr']:
+							flag = False
+							break
+			if flag:
+				print 'Nodes', n1, 'and', n2, 'have the same set of neighbors'
+				collapse(G,n1,n2)
+				toremove+=[n1,n2]
+	toremove = set(toremove)
+	print toremove
+	for rem in toremove:
+		print 'Removing node', rem
+		G.remove_node(rem)
+	return G
+
+#creates a new node that is the merging of two nodes
+def collapse(G, n1, n2):
+	newn = n1 + '-' + n2
+	G.add_node(newn)
+	G.node[newn]['label']=newn
+	for reg in G.predecessors(n1):
+		G.add_edge(reg,newn)
+		G[reg][newn]['edge_attr']=G[reg][n1]['edge_attr']
+	for target in G.successors(n1):
+		G.add_edge(newn,target)
+		G[newn][target]['edge_attr']=G[n1][target]['edge_attr']
+	#G.remove_node(n1)
+	#G.remove_node(n2)
+	print 'Collapsed nodes', n1, 'and', n2, 'into', newn
+	return G
