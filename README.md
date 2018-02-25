@@ -18,5 +18,7 @@ Takes a graph and a list of nodes, path, which form a path in the graph. This fu
 Logical transitive reduction: Takes a graph and deletes every edge for which a path exists that causes the same effect as the edge.
 #### reduction.node_collapse:
 Collapses all sufficient-necessary and sufficient-necessary inhibitory edges in a network.
+#### reduction.LVC:
+Logical Vertex Collapse: If two nodes have the same set of in- and out-neighbors with equal corresponding logic implications, then two nodes are merged into one another.
 #### subgraph.finalsg:
 Finds subgraph in a given graph between specified source and target nodes.
