@@ -6,6 +6,7 @@ from tokenizer import tokens
 
 
 def new_node(node, network):
+	#print 'Adding node', node, type(node)
 	network.add_node(node)
 	network.node[node]['label']=node
 	return network
@@ -29,7 +30,7 @@ class Node():
 		G[self.name][target]['arrowhead'] = self.Tail
 		return G
 
-G = nx.DiGraph()
+#G = nx.DiGraph()
 
 #invert the color of an edge if it is inhibitory
 def colorswap(e,G):
@@ -98,6 +99,8 @@ def p_term(p):
 	'term : ID'
 	p[0] = Node(p[1])
 	new_node(p[1], G)
+	#print G.nodes()
+	#print 'p[1] is', p[1], type(p[1])
 	return p
 
 def p_term_expr(p):
@@ -113,7 +116,7 @@ def p_term_expr(p):
 
 # Error rule for syntax errors
 def p_error(p):
-	print "Syntax error in input!"
+	print "Syntax error in input!", p
 
 
 # Build the parser
@@ -124,10 +127,31 @@ def readfile(filename):
 	text = f.read()
 	text_iter = iter(text.splitlines())
 	#run the parser for each line in the file
+	global G
+	G = nx.DiGraph()
 	for s in text_iter:
 		edges = {}
 		parser.parse(s)
 
+	#invert the color of inhibitory edges
+	for e in G.edges_iter(data=True):
+		if G[e[0]][e[1]]['arrowhead'] == 'tee':
+			colorswap(e,G)
+	
+	return G
+
+
+def readstr(text):
+	#print 'Into boolparser function, the rules are:', text
+	text_iter = iter(text.splitlines())
+	#run the parser for each line in the file
+	global G
+	G = nx.DiGraph()
+	for s in text_iter:
+		edges = {}
+		parser.parse(s)
+
+	#parser.restart()
 	#invert the color of inhibitory edges
 	for e in G.edges_iter(data=True):
 		if G[e[0]][e[1]]['arrowhead'] == 'tee':

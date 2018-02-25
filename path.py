@@ -52,9 +52,9 @@ def add(relationship,edge_type):
 		
 	elif relationship=='sni':
 		if edge_type=='s':
-			return 'si'
-		elif edge_type=='n':
 			return 'ni'
+		elif edge_type=='n':
+			return 'si'
 		elif edge_type=='si':
 			return 'n'
 		elif edge_type=='ni':
@@ -77,6 +77,8 @@ def path_type(G, path):
 		v = path[i+1]
 		edge_type = G[u][v]['edge_attr']
 		new_rel = add(relationship,edge_type)
+		#print 'Adding edge', u, '->',v
+		#print relationship, '+', edge_type, '=', new_rel
 		if new_rel==None:
 			return None
 		else:

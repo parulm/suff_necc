@@ -9,7 +9,7 @@ import importlib
 
 #Setting the edge attribute so that every time we do not have to read and combine both color and arrowhead type. This function reads a graph and sets a new edge attribute named edge_attr to s/n, s/ni, s, n, si or ni. It returns the edited graph. The returned graph may or may not be used; thanks to automatic pass by reference in python.
 def set_edge_type(G):
-	print 'Setting edge attribute from color and arrow types ...'
+	#print 'Setting edge attribute from color and arrow types ...'
 	for edge in G.edges():
 		arr = G.get_edge_data(*edge)
 		u = edge[0]
@@ -31,7 +31,7 @@ def set_edge_type(G):
 				G[u][v]['edge_attr']='sn'
 			elif etype=='tee':
 				G[u][v]['edge_attr']='sni'
-	print 'Done.'            
+	#print 'Done.'            
 	return G
 
 #Takes a graph and prints at which nodes homogeneity is not being satisfied. Returns nothing in any case.
@@ -150,11 +150,10 @@ def lone_reg(G):
 	#print G.nodes()
 	for node in G.nodes():
 		#print node
-		#if node=='FLIP':
-		#	print 'Yes, we scanned',node
 		regs = G.predecessors(node)
 		if len(regs)==1:
 			parent = regs[0]
+			#print node,'has only regulator', regs[0], 'of type',G[parent][node]['edge_attr']
 			if G[parent][node]['edge_attr']=='sn' or G[parent][node]['edge_attr']=='sni':
 				continue
 			if G[parent][node]['arrowhead']=='normal':
@@ -232,6 +231,8 @@ def update_graph(G,node,node_status):
 	#Also take care of s/n-ly related children
 	print 'Removing node',node
 	G.remove_node(node)
+	lone_reg(G)
+	set_edge_props(G)
 	return None
 
 #function to remove stray nodes
