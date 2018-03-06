@@ -3,8 +3,11 @@
 *.pyc
 *.txt
 *.sh
-test.py
+*.json
+test*
 temp.py
+fndump.py
+rbn.py
 sg_run.py
 sgs.py
 signals.py
