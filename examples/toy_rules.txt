@@ -1,0 +1,17 @@
+A *= S1 or N
+B *= A or D
+C *= B or N
+D *= C or P
+E *= not C and not G
+F *= I and E
+G *= not F or N
+H *= S2 and N
+I *= S2 or H
+J *= G or L
+K *= not J or L
+L *= E and J
+M *= L or K
+N *= S1 and S2
+O *= M
+P *= A and Q
+Q *= S1 or S2

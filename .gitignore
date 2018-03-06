@@ -2,6 +2,7 @@
 *.swp
 *.pyc
 *.txt
+!examples/*.txt
 *.sh
 *.json
 test*
