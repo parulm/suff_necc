@@ -1,0 +1,6 @@
+A	E	n
+B	E	n
+C	E	s
+D	E	ni
+F	E	si
+G	E	s

@@ -9,8 +9,8 @@ def create_node(G,node,node_list):
 	node_list.append(node)
 	return None
 
-fname = '/home/parul/ABA logic inference/inferred/rules_Feb25.txt'
-outf = '/home/parul/ABA logic inference/inferred/network_Feb25.graphml'
+fname = 'examples/inference_test.txt'
+#outf = 'examples/inferred_ABA_network.graphml'
 G = nx.DiGraph()
 node_list = []
 
@@ -46,6 +46,8 @@ comp = {'s':['s', 'ni'], 'si':['si', 'n'], 'n':['n', 'si'], 'ni':['ni', 's']}
 
 gprops.set_edge_type(G)
 
+
+
 for node in G.nodes():
 	regs = list(G.predecessors(node))
 	if len(regs)==0:
@@ -59,12 +61,22 @@ for node in G.nodes():
 			rule_so_far = 'not '+str(G.node[regs[0]]['label'])
 		else:
 			rule_so_far = str(G.node[regs[0]]['label'])
+		rule_opp = ''
 		compatible = True
 		for regulator in regs[1:]:
 			logic = G[regulator][node]['edge_attr']
+			#compatible = True
 			if logic not in comp[dom]:
 				compatible = False
-				break
+				if rule_opp:
+					if dom[0]=='s':
+						rule_opp+=' and '
+					else:
+						rule_opp+=' or '
+					if logic[-1]=='i':
+						rule_opp+='not '
+				rule_opp+=str(G.node[regulator]['label'])
+				#break
 			else:
 				if logic[-1]=='i':
 					if logic[0]=='s':
@@ -79,7 +91,17 @@ for node in G.nodes():
 		if compatible:
 			print str(G.node[node]['label'])+'* = '+rule_so_far
 		else:
-			print 'Regulators of', str(G.node[node]['label']), 'are incompatible'
+			print 'Regulators of', str(G.node[node]['label']), 'are incompatible.',
+			#print 'One set of regulators are:', rule_so_far
+			#print 'Second set of regulators are:', rule_opp
+			if dom=='s' or dom=='ni':
+				#rule_so_far is OR type
+				final_rule1 = '('+rule_opp+')'+' or '+rule_so_far
+				final_rule2 = rule_opp+' and '+'('+rule_so_far+')'
+			else:
+				final_rule1 = '('+rule_opp+')'+' and '+rule_so_far
+				final_rule2 = rule_opp+' or '+'('+rule_so_far+')'
+			print 'Rules as per the two templates are: \n1.',final_rule1, '\n2.', final_rule2 
 print 'Done creating all Boolean rules'
 
 
