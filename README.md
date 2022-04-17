@@ -1,4 +1,8 @@
-## Library to analyze boolean networks in causal logic framework.
+## Library to infer and analyze boolean networks in causal logic framework.
+
+### Using causal logic for inference of Boolean networks
+In the python file `infer.py`, please set the variable `fname` to your relative input file path. The input file must be tab-separated containing the regulator node name, the target node name and the nature of the causal logic relationship coded as sufficient: s, necessary: n, sufficient and necessary: sn, sufficient inhibitory: si, necessary inhibitory: ni, sufficient and necessary inhibitory: sni. Please see the file `examples/inference_test.txt` for reference. The stdOut on running the python file `infer.py` shall display the inferred Boolean rules.
+
 ### Details of all the functions
 #### boolparser.readfile:
 Constructs the causal logic representation of a network from Boolean rules. Assigns color and edge (tail) type to a regulator on the basis of the Boolean rule.
