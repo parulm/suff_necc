@@ -11,9 +11,12 @@ import gprops
 #Takes a graph and deletes every edge for which a path exists that causes the same effect as the edge i.e. the edge is same type as of the path. This is binary transitive reduction which conforms the logical correctness of reduction. Termed logical binary transitive reduction. Functions returns None.
 def edge_red(G):
 	print 'Running logical transitive reduction ...'
-	for edge in G.edges():
+	elist = list(G.edges())
+	for edge in elist:
 		u = edge[0]
 		v = edge[1]
+		if not G.has_edge(u,v):
+			continue
 		arr = G.get_edge_data(*edge)
 		uv_type = arr['edge_attr']
 		for route in nx.all_simple_paths(G, source=u, target=v):

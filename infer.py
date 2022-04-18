@@ -35,9 +35,9 @@ for line in lines:
 
 f.close()
 gprops.set_edge_props(G)
-#gprops.lone_reg(G)
-#reduction.edge_red(G)
-#gprops.set_edge_props(G)
+gprops.lone_reg(G)
+reduction.edge_red(G)
+gprops.set_edge_props(G)
 #nx.write_graphml(G,outf)
 
 #print the Boolean rules that have no incompatibility
@@ -101,7 +101,7 @@ for node in G.nodes():
 			else:
 				final_rule1 = '('+rule_opp+')'+' and '+rule_so_far
 				final_rule2 = rule_opp+' or '+'('+rule_so_far+')'
-			print 'Rules as per the two templates are: \n1.',final_rule1, '\n2.', final_rule2 
+			print 'Rules as per the two templates are: \n1.',final_rule1, '\n2.', final_rule2
 print 'Done creating all Boolean rules'
 
 
@@ -116,7 +116,7 @@ for node in G.nodes():
 	parents = G.predecessors(node)
 	if len(parents)<1:
 		sigs.append(node)
-		
+
 print 'Signals are:', sigs
 
 critical = critical + sigs
